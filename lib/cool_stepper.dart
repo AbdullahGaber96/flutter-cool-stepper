@@ -20,6 +20,9 @@ class CoolStepper extends StatefulWidget {
   /// Actions to take when the final stepper is passed
   final VoidCallback onCompleted;
 
+  /// Actions to take when the stepper index changed
+  final void Function(int) onPageChanged;
+
   /// Padding for the content inside the stepper
   final EdgeInsetsGeometry contentPadding;
 
@@ -35,6 +38,7 @@ class CoolStepper extends StatefulWidget {
     Key? key,
     required this.steps,
     required this.onCompleted,
+    required this.onPageChanged,
     this.contentPadding = const EdgeInsets.symmetric(horizontal: 20.0),
     this.config = const CoolStepperConfig(),
     this.showErrorSnackbar = false,
@@ -80,6 +84,7 @@ class _CoolStepperState extends State<CoolStepper> {
       if (!_isLast(currentStep)) {
         setState(() {
           currentStep++;
+          widget.onPageChanged(currentStep);
         });
         FocusScope.of(context).unfocus();
         switchToPage(currentStep);
@@ -114,6 +119,7 @@ class _CoolStepperState extends State<CoolStepper> {
     if (!_isFirst(currentStep)) {
       setState(() {
         currentStep--;
+        widget.onPageChanged(currentStep);
       });
       switchToPage(currentStep);
     }
